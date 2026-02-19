@@ -1,563 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RiteSet — Micro-Rituals for Your Mood</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Nunito:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #0a0612;
-      color: #ffffff;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* Navigation */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      padding: 20px 40px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 30px;
-    }
-
-    .nav-links a {
-      color: rgba(255, 255, 255, 0.6);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 400;
-      transition: color 0.3s ease;
-    }
-
-    .nav-links a:hover {
-      color: #ffffff;
-    }
-
-    /* Hero Section - Exact App Splash Screen */
-    .hero {
-      width: 100%;
-      height: 100vh;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #0a0612;
-    }
-
-    /* Main background - the curves image */
-    .splash-bg {
-      position: absolute;
-      inset: 0;
-      background-image: url('riteset-splash-bg.png');
-      background-size: cover;
-      background-position: center;
-      transform-origin: center center;
-      animation: bgBreath 8s ease-in-out infinite;
-    }
-
-    /* Subtle movement overlay - left side */
-    .splash-overlay-left {
-      position: absolute;
-      inset: 0;
-      background-image: url('riteset-splash-bg.png');
-      background-size: 110% 110%;
-      background-position: center;
-      mix-blend-mode: screen;
-      opacity: 0.2;
-      transform-origin: left center;
-      animation: curveLeft 5s ease-in-out infinite;
-    }
-
-    /* Subtle movement overlay - right side */
-    .splash-overlay-right {
-      position: absolute;
-      inset: 0;
-      background-image: url('riteset-splash-bg.png');
-      background-size: 110% 110%;
-      background-position: center;
-      mix-blend-mode: screen;
-      opacity: 0.2;
-      transform-origin: right center;
-      animation: curveRight 5s ease-in-out infinite 0.5s;
-    }
-
-    /* Logo container */
-    .splash-content {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 8vh;
-    }
-
-    /* Logo text with diamond */
-    .logo-container {
-      position: relative;
-      animation: logoPulse 4s ease-in-out infinite;
-    }
-
-    .logo-text {
-      color: white;
-      font-weight: 500;
-      text-transform: lowercase;
-      font-size: 52px;
-      font-family: "SF Pro Rounded", "Nunito", "Quicksand", -apple-system, system-ui, sans-serif;
-      letter-spacing: -0.02em;
-    }
-
-    /* Diamond sparkle icon */
-    .sparkle-icon {
-      position: absolute;
-      right: -24px;
-      top: -4px;
-      width: 22px;
-      height: 22px;
-      fill: white;
-      animation: sparkle 2s ease-in-out infinite;
-    }
-
-    /* Glass tagline pill */
-    .tagline {
-      margin-top: 16px;
-      padding: 4px 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-      animation: taglineFloat 3s ease-in-out infinite;
-    }
-
-    .tagline-text {
-      font-size: 11px;
-      font-family: "Nunito", -apple-system, system-ui, sans-serif;
-      font-weight: 500;
-      letter-spacing: 0.03em;
-      color: #1a1a2e;
-    }
-
-    /* Film grain overlay */
-    .grain-overlay {
-      position: absolute;
-      inset: 0;
-      opacity: 0.05;
-      pointer-events: none;
-      animation: grain 0.8s steps(10) infinite;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    }
-
-    /* Keyframe Animations */
-    @keyframes bgBreath {
-      0%, 100% { 
-        transform: scale(1);
-      }
-      50% { 
-        transform: scale(1.02);
-      }
-    }
-    
-    @keyframes curveLeft {
-      0%, 100% { 
-        transform: translateX(0) scaleX(1);
-      }
-      50% { 
-        transform: translateX(10px) scaleX(1.02);
-      }
-    }
-    
-    @keyframes curveRight {
-      0%, 100% { 
-        transform: translateX(0) scaleX(1);
-      }
-      50% { 
-        transform: translateX(-10px) scaleX(1.02);
-      }
-    }
-
-    @keyframes logoPulse {
-      0%, 100% { 
-        transform: scale(1);
-      }
-      50% { 
-        transform: scale(1.02);
-      }
-    }
-
-    @keyframes sparkle {
-      0%, 100% {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
-      }
-      50% {
-        opacity: 0.7;
-        transform: scale(0.9) rotate(15deg);
-      }
-    }
-
-    @keyframes taglineFloat {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-3px);
-      }
-    }
-    
-    @keyframes grain {
-      0%, 100% { transform: translate(0, 0); }
-      10% { transform: translate(-1%, -1%); }
-      20% { transform: translate(1%, 1%); }
-      30% { transform: translate(-0.5%, 0.5%); }
-      40% { transform: translate(0.5%, -0.5%); }
-      50% { transform: translate(-1%, 1%); }
-      60% { transform: translate(1%, -1%); }
-      70% { transform: translate(0, 1%); }
-      80% { transform: translate(-1%, 0); }
-      90% { transform: translate(1%, 0.5%); }
-    }
-
-    /* Sections */
-    .section {
-      padding: 100px 40px;
-      max-width: 900px;
-      margin: 0 auto;
-      background: #0a0612;
-    }
-
-    .section-title {
-      font-size: 32px;
-      font-weight: 600;
-      margin-bottom: 40px;
-      background: linear-gradient(135deg, #ffffff 0%, #7ab8ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .section-content {
-      font-size: 15px;
-      line-height: 1.9;
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .section-content h2 {
-      font-size: 20px;
-      font-weight: 600;
-      color: #ffffff;
-      margin: 40px 0 20px;
-    }
-
-    .section-content h3 {
-      font-size: 17px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.9);
-      margin: 30px 0 15px;
-    }
-
-    .section-content p {
-      margin-bottom: 20px;
-    }
-
-    .section-content ul {
-      margin: 20px 0;
-      padding-left: 25px;
-    }
-
-    .section-content li {
-      margin-bottom: 12px;
-    }
-
-    .section-content a {
-      color: #7ab8ff;
-      text-decoration: none;
-    }
-
-    .section-content a:hover {
-      text-decoration: underline;
-    }
-
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
-      margin: 0 40px;
-    }
-
-    /* Footer */
-    footer {
-      padding: 60px 40px;
-      text-align: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      background: #0a0612;
-    }
-
-    .footer-logo {
-      font-size: 18px;
-      font-weight: 300;
-      letter-spacing: 3px;
-      margin-bottom: 20px;
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin-bottom: 30px;
-    }
-
-    .footer-links a {
-      color: rgba(255, 255, 255, 0.4);
-      text-decoration: none;
-      font-size: 13px;
-      transition: color 0.3s ease;
-    }
-
-    .footer-links a:hover {
-      color: #ffffff;
-    }
-
-    .copyright {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.3);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      nav {
-        padding: 15px 20px;
-      }
-
-      .nav-links {
-        gap: 20px;
-      }
-
-      .nav-links a {
-        font-size: 12px;
-      }
-
-      .logo-text {
-        font-size: 40px;
-      }
-
-      .sparkle-icon {
-        width: 18px;
-        height: 18px;
-        right: -20px;
-        top: -2px;
-      }
-
-      .section {
-        padding: 60px 20px;
-      }
-
-      .section-title {
-        font-size: 24px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiteSet — Micro-Rituals for Your Mood</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 40px;
+            display: flex;
+            gap: 32px;
+        }
+        
+        nav a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #ffffff;
+        }
+        
+        /* Hero/Splash - Full viewport */
+        .splash {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Background image */
+        .splash-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('riteset-splash-bg.png') center center / cover no-repeat;
+            opacity: 0.9;
+        }
+        
+        /* Fallback gradient if no image */
+        .splash::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 30% 40%, rgba(168, 212, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 60%, rgba(255, 179, 102, 0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+        
+        .splash-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+        
+        .splash h1 {
+            font-size: 48px;
+            font-weight: 300;
+            letter-spacing: 8px;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+        
+        .splash .tagline {
+            font-size: 16px;
+            font-weight: 300;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 2px;
+        }
+        
+        /* Legal Sections */
+        .legal-section {
+            min-height: 100vh;
+            padding: 100px 40px;
+            background: #0a0a0f;
+        }
+        
+        .legal-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .legal-content h2 {
+            font-size: 32px;
+            font-weight: 300;
+            margin-bottom: 32px;
+            color: #ffffff;
+        }
+        
+        .legal-content h3 {
+            font-size: 16px;
+            font-weight: 500;
+            color: #ffffff;
+            margin-top: 28px;
+            margin-bottom: 12px;
+        }
+        
+        .legal-content p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.8;
+            margin-bottom: 14px;
+        }
+        
+        .legal-content ul {
+            margin-left: 20px;
+            margin-bottom: 14px;
+        }
+        
+        .legal-content li {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+        
+        .legal-content a {
+            color: #a8d4ff;
+            text-decoration: none;
+        }
+        
+        .legal-content a:hover {
+            text-decoration: underline;
+        }
+        
+        .legal-content .updated {
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 32px;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 40px;
+            background: #0a0a0f;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+        
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 16px;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #ffffff;
+        }
+        
+        .copyright {
+            font-size: 12px;
+            color: rgba(255,255,255,0.3);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 16px 20px;
+                gap: 20px;
+            }
+            
+            nav a {
+                font-size: 12px;
+            }
+            
+            .splash h1 {
+                font-size: 32px;
+                letter-spacing: 4px;
+            }
+            
+            .splash .tagline {
+                font-size: 14px;
+            }
+            
+            .legal-section {
+                padding: 80px 24px;
+            }
+            
+            .legal-content h2 {
+                font-size: 26px;
+            }
+            
+            footer {
+                padding: 32px 20px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
-
-  <!-- Navigation -->
-  <nav>
-    <div class="nav-links">
-      <a href="#privacy">Privacy Policy</a>
-      <a href="#terms">Terms of Use</a>
-    </div>
-  </nav>
-
-  <!-- Hero Section - Exact App Splash Screen with Microanimations -->
-  <section class="hero">
-    <!-- Main background image - curves -->
-    <div class="splash-bg"></div>
+    <!-- Navigation -->
+    <nav>
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#terms">Terms of Use</a>
+    </nav>
     
-    <!-- Subtle movement overlay - left side -->
-    <div class="splash-overlay-left"></div>
+    <!-- Splash Screen -->
+    <section class="splash">
+        <div class="splash-bg"></div>
+        <div class="splash-content">
+            <h1>riteset</h1>
+            <p class="tagline">Your Hyperpersonalised Wellness Ritual</p>
+        </div>
+    </section>
     
-    <!-- Subtle movement overlay - right side -->
-    <div class="splash-overlay-right"></div>
+    <!-- Privacy Policy -->
+    <section class="legal-section" id="privacy">
+        <div class="legal-content">
+            <h2>Privacy Policy</h2>
+            <p class="updated"><strong>Last Updated:</strong> February 2026</p>
+            
+            <h3>1. Introduction</h3>
+            <p>Welcome to RiteSet. We respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you use our mobile application.</p>
+            
+            <h3>2. Information We Collect</h3>
+            <p><strong>Information You Provide:</strong></p>
+            <ul>
+                <li>Mood Check-In Data: Text or voice input describing how you're feeling</li>
+                <li>Journal Entries: Personal reflections you write within the app</li>
+                <li>Session History: Records of completed rituals and exercises</li>
+                <li>Preferences: Your settings for voice, sounds, and notifications</li>
+            </ul>
+            <p><strong>Automatically Collected Information:</strong></p>
+            <ul>
+                <li>Usage Data: How you interact with the app (features used, session duration)</li>
+                <li>Device Information: Device type, operating system, app version</li>
+                <li>Crash Reports: Technical data to help us fix issues</li>
+            </ul>
+            
+            <h3>3. How We Use Your Information</h3>
+            <ul>
+                <li>To personalize your ritual experience based on your mood</li>
+                <li>To provide Smart Analysis insights about your patterns</li>
+                <li>To improve our app and develop new features</li>
+                <li>To respond to your support requests</li>
+            </ul>
+            
+            <h3>4. Data Storage & Security</h3>
+            <p>Your data is stored securely on your device and, if you enable sync features, on encrypted cloud servers. We implement industry-standard security measures to protect your information.</p>
+            
+            <h3>5. Data Sharing</h3>
+            <p>We do not sell your personal data. We may share anonymized, aggregated data for analytics purposes. We may share data with service providers who assist in operating our app, subject to confidentiality agreements.</p>
+            
+            <h3>6. Your Rights</h3>
+            <ul>
+                <li><strong>Access:</strong> Request a copy of your data</li>
+                <li><strong>Deletion:</strong> Request deletion of your data</li>
+                <li><strong>Correction:</strong> Request correction of inaccurate data</li>
+                <li><strong>Export:</strong> Export your data in a portable format</li>
+            </ul>
+            
+            <h3>7. Children's Privacy</h3>
+            <p>RiteSet is not intended for children under 13. We do not knowingly collect data from children under 13.</p>
+            
+            <h3>8. Changes to This Policy</h3>
+            <p>We may update this Privacy Policy from time to time. We will notify you of significant changes through the app.</p>
+            
+            <h3>9. Contact Us</h3>
+            <p>If you have questions about this Privacy Policy, please contact us at: <a href="mailto:privacy@riteset.app">privacy@riteset.app</a></p>
+        </div>
+    </section>
     
-    <!-- Logo and tagline -->
-    <div class="splash-content">
-      <div class="logo-container">
-        <span class="logo-text">riteset</span>
-        <!-- Diamond sparkle icon -->
-        <svg class="sparkle-icon" viewBox="0 0 24 24">
-          <!-- Main 4-point star -->
-          <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" />
-          <!-- Small accent star -->
-          <path d="M19 2 L19.5 4 L21.5 4.5 L19.5 5 L19 7 L18.5 5 L16.5 4.5 L18.5 4 Z" opacity="0.7" transform="scale(0.5) translate(24, -2)" />
-        </svg>
-      </div>
-      
-      <!-- Tagline in glass style -->
-      <div class="tagline">
-        <span class="tagline-text">Your Hyperpersonalised Wellness Ritual</span>
-      </div>
-    </div>
+    <!-- Terms of Use -->
+    <section class="legal-section" id="terms">
+        <div class="legal-content">
+            <h2>Terms of Use</h2>
+            <p class="updated"><strong>Last Updated:</strong> February 2026</p>
+            
+            <h3>1. Acceptance of Terms</h3>
+            <p>By downloading, installing, or using RiteSet, you agree to be bound by these Terms of Use. If you do not agree to these terms, do not use the app.</p>
+            
+            <h3>2. Description of Service</h3>
+            <p>RiteSet is a wellness and self-care application that provides personalized micro-rituals, including breathwork, meditation, journaling, and relaxation exercises. The app uses AI to personalize your experience based on your input.</p>
+            
+            <h3>3. Important Health Disclaimer</h3>
+            <p><strong>RiteSet is not a medical device or healthcare service.</strong> The app is designed to complement your daily wellness practice and is not intended to diagnose, treat, cure, or prevent any medical condition.</p>
+            <p>If you are experiencing a crisis, please contact a licensed healthcare professional or emergency services immediately.</p>
+            
+            <h3>4. User Account & Responsibilities</h3>
+            <ul>
+                <li>You are responsible for maintaining the confidentiality of your account</li>
+                <li>You agree to provide accurate information</li>
+                <li>You agree not to use the app for any unlawful purpose</li>
+                <li>You agree not to attempt to reverse engineer, modify, or distribute the app</li>
+            </ul>
+            
+            <h3>5. Subscription & Payments</h3>
+            <p><strong>Free Tier:</strong> Access to core features including 100+ micro-rituals, mood check-in, and basic Smart Analysis.</p>
+            <p><strong>Premium Subscription:</strong></p>
+            <ul>
+                <li>Monthly: $9.99/month</li>
+                <li>Annual: $70/year (save 42%)</li>
+            </ul>
+            <p>Subscriptions are billed through your Apple ID account. Subscriptions automatically renew unless cancelled at least 24 hours before the end of the current period.</p>
+            
+            <h3>6. Cancellation & Refunds</h3>
+            <p>You may cancel your subscription at any time through your Apple ID account settings. Refunds are handled according to Apple's refund policy.</p>
+            
+            <h3>7. Intellectual Property</h3>
+            <p>All content, features, and functionality of RiteSet are owned by us and are protected by copyright, trademark, and other intellectual property laws.</p>
+            
+            <h3>8. User Content</h3>
+            <p>You retain ownership of content you create (journal entries, mood check-ins). By using the app, you grant us a limited license to process this content to provide our services.</p>
+            
+            <h3>9. Limitation of Liability</h3>
+            <p>RiteSet is provided "as is" without warranties of any kind. We are not liable for any indirect, incidental, or consequential damages arising from your use of the app.</p>
+            
+            <h3>10. Changes to Terms</h3>
+            <p>We reserve the right to modify these Terms of Use at any time. Continued use of the app after changes constitutes acceptance of the new terms.</p>
+            
+            <h3>11. Contact Us</h3>
+            <p>If you have questions about these Terms of Use, please contact us at: <a href="mailto:legal@riteset.app">legal@riteset.app</a></p>
+        </div>
+    </section>
     
-    <!-- Film grain overlay -->
-    <div class="grain-overlay"></div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- Privacy Policy Section -->
-  <section id="privacy" class="section">
-    <h1 class="section-title">Privacy Policy</h1>
-    <div class="section-content">
-      <p><strong>Last Updated:</strong> February 2026</p>
-      
-      <h2>1. Introduction</h2>
-      <p>Welcome to RiteSet. We respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you use our mobile application.</p>
-      
-      <h2>2. Information We Collect</h2>
-      <h3>Information You Provide</h3>
-      <ul>
-        <li><strong>Mood Check-In Data:</strong> Text or voice input describing how you're feeling</li>
-        <li><strong>Journal Entries:</strong> Personal reflections you write within the app</li>
-        <li><strong>Session History:</strong> Records of completed rituals and exercises</li>
-        <li><strong>Preferences:</strong> Your settings for voice, sounds, and notifications</li>
-      </ul>
-      
-      <h3>Automatically Collected Information</h3>
-      <ul>
-        <li><strong>Usage Data:</strong> How you interact with the app (features used, session duration)</li>
-        <li><strong>Device Information:</strong> Device type, operating system, app version</li>
-        <li><strong>Crash Reports:</strong> Technical data to help us fix issues</li>
-      </ul>
-      
-      <h2>3. How We Use Your Information</h2>
-      <ul>
-        <li>To personalize your ritual experience based on your mood</li>
-        <li>To provide Smart Analysis insights about your patterns</li>
-        <li>To improve our app and develop new features</li>
-        <li>To respond to your support requests</li>
-      </ul>
-      
-      <h2>4. Data Storage & Security</h2>
-      <p>Your data is stored securely on your device and, if you enable sync features, on encrypted cloud servers. We implement industry-standard security measures to protect your information.</p>
-      
-      <h2>5. Data Sharing</h2>
-      <p>We do not sell your personal data. We may share anonymized, aggregated data for analytics purposes. We may share data with service providers who assist in operating our app, subject to confidentiality agreements.</p>
-      
-      <h2>6. Your Rights</h2>
-      <ul>
-        <li><strong>Access:</strong> Request a copy of your data</li>
-        <li><strong>Deletion:</strong> Request deletion of your data</li>
-        <li><strong>Correction:</strong> Request correction of inaccurate data</li>
-        <li><strong>Export:</strong> Export your data in a portable format</li>
-      </ul>
-      
-      <h2>7. Children's Privacy</h2>
-      <p>RiteSet is not intended for children under 13. We do not knowingly collect data from children under 13.</p>
-      
-      <h2>8. Changes to This Policy</h2>
-      <p>We may update this Privacy Policy from time to time. We will notify you of significant changes through the app.</p>
-      
-      <h2>9. Contact Us</h2>
-      <p>If you have questions about this Privacy Policy, please contact us at:<br>
-      <a href="mailto:privacy@riteset.app">privacy@riteset.app</a></p>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- Terms of Use Section -->
-  <section id="terms" class="section">
-    <h1 class="section-title">Terms of Use</h1>
-    <div class="section-content">
-      <p><strong>Last Updated:</strong> February 2026</p>
-      
-      <h2>1. Acceptance of Terms</h2>
-      <p>By downloading, installing, or using RiteSet, you agree to be bound by these Terms of Use. If you do not agree to these terms, do not use the app.</p>
-      
-      <h2>2. Description of Service</h2>
-      <p>RiteSet is a wellness and self-care application that provides personalized micro-rituals, including breathwork, meditation, journaling, and relaxation exercises. The app uses AI to personalize your experience based on your input.</p>
-      
-      <h2>3. Important Health Disclaimer</h2>
-      <p><strong>RiteSet is not a medical device or healthcare service.</strong> The app is designed to complement your daily wellness practice and is not intended to diagnose, treat, cure, or prevent any medical or mental health condition.</p>
-      <p>If you are experiencing a mental health crisis, please contact a licensed healthcare professional or emergency services immediately.</p>
-      
-      <h2>4. User Account & Responsibilities</h2>
-      <ul>
-        <li>You are responsible for maintaining the confidentiality of your account</li>
-        <li>You agree to provide accurate information</li>
-        <li>You agree not to use the app for any unlawful purpose</li>
-        <li>You agree not to attempt to reverse engineer, modify, or distribute the app</li>
-      </ul>
-      
-      <h2>5. Subscription & Payments</h2>
-      <h3>Free Tier</h3>
-      <p>Access to core features including 100+ micro-rituals, mood check-in, and basic Smart Analysis.</p>
-      
-      <h3>Premium Subscription</h3>
-      <ul>
-        <li><strong>Monthly:</strong> $9.99/month</li>
-        <li><strong>Annual:</strong> $70/year (save 42%)</li>
-      </ul>
-      <p>Subscriptions are billed through your Apple ID account. Subscriptions automatically renew unless cancelled at least 24 hours before the end of the current period.</p>
-      
-      <h2>6. Cancellation & Refunds</h2>
-      <p>You may cancel your subscription at any time through your Apple ID account settings. Refunds are handled according to Apple's refund policy.</p>
-      
-      <h2>7. Intellectual Property</h2>
-      <p>All content, features, and functionality of RiteSet are owned by us and are protected by copyright, trademark, and other intellectual property laws.</p>
-      
-      <h2>8. User Content</h2>
-      <p>You retain ownership of content you create (journal entries, mood check-ins). By using the app, you grant us a limited license to process this content to provide our services.</p>
-      
-      <h2>9. Limitation of Liability</h2>
-      <p>RiteSet is provided "as is" without warranties of any kind. We are not liable for any indirect, incidental, or consequential damages arising from your use of the app.</p>
-      
-      <h2>10. Changes to Terms</h2>
-      <p>We reserve the right to modify these Terms of Use at any time. Continued use of the app after changes constitutes acceptance of the new terms.</p>
-      
-      <h2>11. Governing Law</h2>
-      <p>These terms are governed by the laws of [Your Jurisdiction]. Any disputes shall be resolved in the courts of [Your Jurisdiction].</p>
-      
-      <h2>12. Contact Us</h2>
-      <p>If you have questions about these Terms of Use, please contact us at:<br>
-      <a href="mailto:legal@riteset.app">legal@riteset.app</a></p>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="footer-logo">riteset</div>
-    <div class="footer-links">
-      <a href="#privacy">Privacy Policy</a>
-      <a href="#terms">Terms of Use</a>
-      <a href="mailto:hello@riteset.app">Contact</a>
-    </div>
-    <p class="copyright">© 2026 RiteSet. All rights reserved.</p>
-  </footer>
-
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">riteset</div>
+        <div class="footer-links">
+            <a href="#privacy">Privacy Policy</a>
+            <a href="#terms">Terms of Use</a>
+            <a href="mailto:hello@riteset.app">Contact</a>
+        </div>
+        <p class="copyright">© 2026 RiteSet. All rights reserved.</p>
+    </footer>
 </body>
 </html>
